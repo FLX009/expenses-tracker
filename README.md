@@ -3,8 +3,6 @@ A CLI application that tracks your expenses.
 
 Expenses are written in a JSON file.
 
-Requires Python 3.7+
-
 ## -Usage-
 ### Add new expenses:
 ```bash
@@ -16,18 +14,16 @@ python expense-tracker.py add -d 'Groceries' -a 100
 ```bash
 # you can specify which month of the current year to summary
 python expense-tracker.py summary -m 08
-```
-Example output:
-```
+
+# example output:
 Total expenses: $300
 ```
 ### List expenses:
 ```bash
 # it lists all your expenses
 python expense-tracker.py list
-```
-Example output:
-```
+
+# example output:
 ID        Description    Date        Amount
 ---------------------------------------------
 1         Groceries      08/14/2026  $100
@@ -50,12 +46,11 @@ python expense-tracker.py delete 1
 ```bash
 # clone the repo into your machine
 git clone https://github.com/FLX009/expenses-tracker.git
-```
-```bash
+
 # open the directory
 cd expenses-tracker
-```
-```bash
+
 # check all commands
 python expense-tracker.py --help
 ```
+Requires Python 3.7+
