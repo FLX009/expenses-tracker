@@ -1,14 +1,15 @@
 import argparse
-import json
 import datetime
+import json
+
 
 class ExpenseTracker:
-    def __init__(self, expenses = []):
-        self.expenses = expenses
+    def __init__(self, expenses=None):
+        self.expenses = expenses if expenses else []
 
     def get_date(self) -> str:
-        x = datetime.datetime.now()
-        y = x.strftime(("%m/%d/%Y"))
+        x = datetime.datetime.now(tz=datetime.timezone.utc)
+        y = x.strftime("%m/%d/%Y")
         return y
 
     def get_id(self):
@@ -16,10 +17,10 @@ class ExpenseTracker:
             return 1
         else:
             return max(e["ID"] for e in self.expenses) + 1
-    
+
     def write_file(self):
         with open("expenses.json", "w") as f:
-            json.dump(self.expenses, f, indent=2)     
+            json.dump(self.expenses, f, indent=2)
 
     def add_expense(self, desc: str, amount: int):
         if amount <= 0:
@@ -28,17 +29,23 @@ class ExpenseTracker:
             "description": desc,
             "amount": amount,
             "date": self.get_date(),
-            "ID": self.get_id()
+            "ID": self.get_id(),
         }
         self.expenses.append(expense)
         self.write_file()
-        return f"expense added. (ID:{expense['ID']})"  
+        return f"expense added. (ID:{expense['ID']})"
 
-    def summary(self, month = None):
+    def summary(self, month=None):
         x = 0
         if month:
             for e in self.expenses:
-                x += e["amount"] if month == e["date"][0:2] and e["date"][6:] == str(datetime.datetime.now().year) else 0
+                x += (
+                    e["amount"]
+                    if month == e["date"][0:2]
+                    and e["date"][6:]
+                    == str(datetime.datetime.now(tz=datetime.timezone.utc).year)
+                    else 0
+                )
         else:
             for e in self.expenses:
                 x += e["amount"]
@@ -49,13 +56,13 @@ class ExpenseTracker:
         for e in self.expenses:
             if e["ID"] == e_id:
                 self.expenses.remove(e)
-                break 
+                break
         else:
-            return f"expense not found"
+            return "expense not found"
         self.write_file()
-        return f"expense deleted"
+        return "expense deleted"
 
-    def edit_expense(self, e_id, e_desc = None, e_amount = None):
+    def edit_expense(self, e_id, e_desc=None, e_amount=None):
         if not e_desc and not e_amount:
             return "not enough arguments"
         for e in self.expenses:
@@ -66,28 +73,35 @@ class ExpenseTracker:
                     e["amount"] = e_amount
                 self.write_file()
                 return "expense edited"
-        else:
-            return "expense not found"
-
+        return "expense not found"
 
     def list_expenses(self) -> None:
         print(f"{'ID':<10}{'Description':<10}{'Date':^13}{'Amount':<10}")
         print(f"{'-' * 45}")
         for e in self.expenses:
-            print(f"{e['ID']:<10}{e['description']:<10}{e['date']:^13}${e['amount']:<10}")
+            print(
+                f"{e['ID']:<10}{e['description']:<10}{e['date']:^13}${e['amount']:<10}"
+            )
         print(f"{'-' * 45}")
 
+
 def main():
-    parser = argparse.ArgumentParser(prog="Expense Tracker")
+    parser = argparse.ArgumentParser(prog="expense-tracker")
 
     subparser = parser.add_subparsers(dest="command")
 
     add_parser = subparser.add_parser("add", help="add a expense to the tracker")
-    add_parser.add_argument("-d", "--description", required=True, help="description of the expense")
-    add_parser.add_argument("-a",  "--amount", required=True, type=int, help="amount of the expense")
+    add_parser.add_argument(
+        "-d", "--description", required=True, help="description of the expense"
+    )
+    add_parser.add_argument(
+        "-a", "--amount", required=True, type=int, help="amount of the expense"
+    )
 
     delete_parser = subparser.add_parser("delete", help="deletes a task")
-    delete_parser.add_argument("ID", type=int, help="ID of the expense you want to deleted")
+    delete_parser.add_argument(
+        "ID", type=int, help="ID of the expense you want to deleted"
+    )
 
     edit_parser = subparser.add_parser("edit", help="edit a expense")
     edit_parser.add_argument("ID", type=int, help="ID of expense you want to edit")
@@ -97,7 +111,12 @@ def main():
     subparser.add_parser("list", help="list all expenses")
 
     summary_parser = subparser.add_parser("summary", help="summary of the expenses")
-    summary_parser.add_argument("-m", "--month", choices=["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"], help="filter by month")
+    summary_parser.add_argument(
+        "-m",
+        "--month",
+        choices=[f"{i:02d}" for i in range(1, 13)],
+        help="filter by month",
+    )
 
     args = parser.parse_args()
 
@@ -119,10 +138,11 @@ def main():
             print(tracker.summary())
     elif args.command == "delete":
         print(tracker.del_expense(args.ID))
-    elif args.command == "edit": 
+    elif args.command == "edit":
         print(tracker.edit_expense(args.ID, args.description, args.amount))
     else:
         parser.print_help()
+
 
 if __name__ == "__main__":
     main()
