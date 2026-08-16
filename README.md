@@ -24,11 +24,15 @@ Total expenses: $300
 python expense-tracker.py list
 
 # example output:
-ID        Description    Date        Amount
----------------------------------------------
-1         Groceries      08/14/2026  $100
-2         Rent           08/14/2026  $200
++---------------+----------+------------+------+
+| description   | amount   | date       |   ID |
++===============+==========+============+======+
+| Groceries     | $100     | 08/16/2026 |    1 |
++---------------+----------+------------+------+
+| Rent          | $200     | 08/16/2026 |    2 |
++---------------+----------+------------+------+
 ```
+
 ### Edit expenses:
 ```bash
 # specify the ID of the expense and add the changes.         
@@ -47,7 +51,7 @@ with pip:
 # with pip install
 pip install git+https://github.com/FLX009/expenses-tracker.git
 
-# check all command
+# check all commands
 expense-tracker --help
 ```
 
