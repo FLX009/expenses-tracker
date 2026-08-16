@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "expense-tracker"
+version = "0.1.0"
+description = "A CLI expense tracker"
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = [
+    "tabulate",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "ruff",
+]
+
+[project.scripts]
+expense-tracker = "expense_tracker:main"

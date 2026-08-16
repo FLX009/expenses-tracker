@@ -42,7 +42,16 @@ python expense-tracker.py delete 1
 ```
 
 ## -How to install-
+with pip:
+```bash
+# with pip install
+pip install git+https://github.com/FLX009/expenses-tracker.git
 
+# check all command
+expense-tracker --help
+```
+
+with git:
 ```bash
 # clone the repo into your machine
 git clone https://github.com/FLX009/expenses-tracker.git
@@ -51,6 +60,6 @@ git clone https://github.com/FLX009/expenses-tracker.git
 cd expenses-tracker
 
 # check all commands
-python expense-tracker.py --help
+python expense_tracker.py --help
 ```
 Requires Python 3.7+

@@ -1,3 +1,5 @@
 .vscode/
 __pycache__/
 expenses.json
+.venv/
+expense_tracker.egg-info

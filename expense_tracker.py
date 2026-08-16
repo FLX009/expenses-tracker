@@ -1,7 +1,7 @@
 import argparse
 import datetime
 import json
-
+from tabulate import tabulate
 
 class ExpenseTracker:
     def __init__(self, expenses=None):
@@ -76,13 +76,13 @@ class ExpenseTracker:
         return "expense not found"
 
     def list_expenses(self) -> None:
-        print(f"{'ID':<10}{'Description':<10}{'Date':^13}{'Amount':<10}")
-        print(f"{'-' * 45}")
+        display_row = []
         for e in self.expenses:
-            print(
-                f"{e['ID']:<10}{e['description']:<10}{e['date']:^13}${e['amount']:<10}"
-            )
-        print(f"{'-' * 45}")
+            row = e.copy()
+            row["amount"] = "$"+ str(e["amount"])
+            display_row.append(row) 
+
+        print(tabulate(display_row, headers="keys", tablefmt="grid"))
 
 
 def main():
